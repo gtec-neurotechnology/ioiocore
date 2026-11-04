@@ -65,7 +65,7 @@ authorization with a neutral provider interface, hardens the real-time
 data path, threading and error handling for clinical use, and removes an
 unsafe serialization path. It is also the first ioiocore release to
 publish wheels for Linux and for Python 3.14.
-See the [Migration Guide](https://gtec-medical-engineering.github.io/ioiocore/content/migration.html)
+See the [Migration Guide](https://gtec-neurotechnology.github.io/ioiocore/content/migration.html)
 for how to upgrade downstream code.
 
 - **A node whose inputs are all asynchronous no longer stalls on its

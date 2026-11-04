@@ -3,8 +3,8 @@
 [![Powered by g.tec](https://img.shields.io/badge/powered_by-g.tec-blue)](http://gtec.at)
 [![pypi](https://img.shields.io/pypi/v/ioiocore.svg?label=PyPI%20version&color=brown)](https://pypi.org/project/ioiocore/)
 [![python](https://img.shields.io/pypi/pyversions/ioiocore.svg)](https://pypi.org/project/ioiocore/)
-[![License](https://img.shields.io/badge/License-GNCL-red)](https://github.com/gtec-medical-engineering/ioiocore/blob/main/LICENSE)
-[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-green)](https://gtec-medical-engineering.github.io/ioiocore/)
+[![License](https://img.shields.io/badge/License-GNCL-red)](https://github.com/gtec-neurotechnology/ioiocore/blob/main/LICENSE)
+[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-green)](https://gtec-neurotechnology.github.io/ioiocore/)
 
 **Real-time signal processing framework for Python**
 
@@ -19,11 +19,11 @@ pip install ioiocore
 ```
 
 ## Documentation
-Full documentation is available at [GitHub Pages](https://gtec-medical-engineering.github.io/ioiocore/).
+Full documentation is available at [GitHub Pages](https://gtec-neurotechnology.github.io/ioiocore/).
 
 ## License
-`ioiocore` is licensed under the **g.tec Non-Commercial License (GNCL)**. See the [LICENSE](https://github.com/gtec-medical-engineering/ioiocore/blob/main/LICENSE) file for details.
+`ioiocore` is licensed under the **g.tec Non-Commercial License (GNCL)**. See the [LICENSE](https://github.com/gtec-neurotechnology/ioiocore/blob/main/LICENSE) file for details.
 
 ## Changelog
 
-Consult the [Changelog](https://gtec-medical-engineering.github.io/ioiocore/#changelog) section.
+Consult the [Changelog](https://gtec-neurotechnology.github.io/ioiocore/#changelog) section.
