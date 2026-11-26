@@ -130,10 +130,16 @@ class Node(ProcessingElement):
         This method should be implemented to define the setup logic for the
         Node.
 
+        Called once per run, before the first ``step()``, with a context
+        for every input port. A node whose input ports are all ASYNC is
+        set up as soon as each has a context, so ``data`` is then empty;
+        any other node is set up on its first cycle.
+
         Parameters
         ----------
         data : dict
-            The input data to configure the Node.
+            The input data to configure the Node. Empty for a node whose
+            input ports are all ASYNC.
         port_context_in : dict
             Context for the input ports.
 

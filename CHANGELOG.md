@@ -1,5 +1,15 @@
 ## Changelog
 
+### [5.1.2] - 2026-11-26
+
+- **A node whose inputs are all event (`ASYNC`) ports sets up as soon as
+  every input has a context, not on its first event.** Before, nothing
+  after such a node could set up until it had received an event, so a
+  node joining that branch with another one ran no cycle, and the other
+  branch's data queued and then arrived in one burst. Its `setup()` now
+  receives an empty `data` dict, and is not followed by a `step()`. A
+  node with a continuous (`SYNC`) input still sets up on its first frame.
+
 ### [5.1.1] - 2026-10-03
 
 - **An application frozen with PyInstaller finds what ioiocore's

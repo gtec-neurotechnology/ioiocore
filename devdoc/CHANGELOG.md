@@ -6,13 +6,13 @@ written for whoever has to touch the same code next, not for a user.
 
 Its counterpart is the root `CHANGELOG.md`, which is **public**, and
 published three times over on every release. The release job copies it
-verbatim into the public mirror (`.github/workflows/deploy.yml:264`);
-the doc job appends it to `README.md` before Sphinx builds the manual
-(`:137-142`), and that build is pushed to the mirror's GitHub Pages
-(`:242-249`). It also drives the release itself:
+verbatim into the public mirror (`.github/workflows/release.yml`,
+job `release`); the job `doc` appends it to `README.md` before Sphinx
+builds the manual, and `release` pushes that build to the mirror's
+GitHub Pages. It also drives the release itself:
 `sessions/utilities/changelog_parser.extract_latest_version` reads the
-version out of it, and both the build job and the release job state
-that version rather than deriving it from a tag (`:87-95`, `:188-196`).
+version out of it, and the job `plan` states that version for every job
+after it rather than deriving it from a tag.
 
 This file never leaves the development repository. `setuptools_scm` puts
 every tracked file in the sdist, so `prune devdoc` in `MANIFEST.in` is
@@ -70,6 +70,91 @@ created. Until then ioiocore had no internal changelog for it to check,
 and the two could have drifted from the moment this one existed.
 
 ---
+
+## [5.1.2] - 2026-11-26
+
+### A node with only event inputs sets up from its contexts, 2026-11-26
+
+Reported from dart-live on g.Pype 4.2.0 and ioiocore 5.1.1. A node whose
+inputs are all ASYNC ran `setup()` on its first event, so until then its
+output had no context, and a consumer's cycle-0 gate (D-CORE-10) stayed
+shut. D-NODE-09 hands a context on at setup, but only one hop: a node
+that sets up on data passes nothing on before its data. Measured with
+g.Pype, Generator -> an event node -> X -> one input of a two-input
+join, X events-only: while X saw no event the join ran 0 cycles in
+2 s, with an event on the other input every 50 ms; when X fired at
+1.0 s, X and the join set up within 4 ms of each other and 20 queued
+steps ran inside 20 ms. dart-live met it twice: trigger groups joined by one node showed
+nothing until every group had had a pulse, and every node behind a
+closed g.Pype `Gate` never set up.
+
+`INodeImp._setup_from_contexts` now sets such a node up as soon as every
+input has a context, with an empty data dict, and without a step. It
+runs on every wake; `ONodeImp._push_context` wakes a consumer whose
+context it sets (D-NODE-10), so a chain of events-only nodes sets up in
+turn. `_run_cycle` skips setup when `_context` is already set, and the
+counter does not move, so decimation counts from the first step. A node
+with a SYNC input is unchanged, and so is a batch run (D-NODE-12).
+
+Measured after: the same g.Pype pipeline sets X and the join up at
+start, and the join steps once per event, 50 ms apart. Three new tests,
+in `test_regressions.py` and `test_without_threads.py`, fail on the
+previous source. A fourth pins the unchanged SYNC case and passes on
+both.
+
+### The monitor-chain test counts passes still to come, 2026-11-26
+
+`test_restarting_from_an_error_handler_keeps_one_monitor` failed the
+Windows 3.11 cell of the second 5.1.2 candidate twice with `2 == 1`. It
+counted a scheduled pass as pending while `when() > loop.time()`, but
+asyncio runs a handle due within one clock resolution -- 15.6 ms on
+Windows up to Python 3.12 -- and the test's interval is 10 ms, so a pass
+that had already run was still counted. Measured locally on 3.11: 4 of
+25 runs failed on the source before D-NODE-12 and 5 of 25 after, so the
+fix was not the cause. The test now counts passes neither cancelled nor
+run: 0 of 25.
+
+### macOS jobs run on macos-15, 2026-11-26
+
+The first 5.1.2 candidate (run 45818226143) lost all five macOS test
+jobs within a second each: "The configuration 'macos-14-arm64-us-default'
+is not supported". GitHub retired the image on 2026-11-02; gpype-dev and
+gtec-gds-dev had moved already. `scripts/ci_matrix.py` names `macos-15`
+for building and testing, and `sessions/utilities/dirs.py` labels local
+output the same way. Windows and Linux passed in that run.
+
+GitHub ended the run as cancelled rather than failed, and
+`cleanup-on-failure` checks `needs.test.result == 'failure'` only, so
+`v5.1.2rc1` stayed on origin at the fix commit with nothing built for
+it. The next candidate therefore resolves to rc2.
+
+### The release workflow is release.yml, and the only one that uploads, 2026-10-30
+
+The owner registered PyPI's trusted publishers for the new organisation
+with one workflow name for every project, `release.yml`, and no
+environment. A publisher names one file, so `deploy.yml` is renamed and
+`publish-pypi.yml`, which finishes a release whose upload failed,
+becomes a `workflow_dispatch` of the same file with the same `run_id`
+input and the same gates (D-BUILD-20). A dispatch carries no commit
+message, so `plan` and everything after it are skipped and only
+`publish-pypi` runs. Comments that point at the file follow it; those
+recording the faults `deploy.yml` once had keep its name. Not exercised
+on a runner yet.
+
+### A release uses no personal token, 2026-10-30
+
+After the repositories moved from `gtec-medical-engineering` to
+`gtec-neurotechnology`, `deploy.yml` named the old account for the
+public repository and authenticated with `GH_PAT`, a personal token of
+the old account that no longer sees the moved repositories -- the same
+two faults that failed gtec_licensing 2.4.1's release twice. The release
+job now uses the run's `GITHUB_TOKEN` for this repository, an
+installation token of the organisation's release App for `ioiocore`
+(checkout and push, GitHub release, `gh-pages`), and PyPI trusted
+publishing: an OIDC exchange in a Python step on the Windows job, and
+`pypa/gh-action-pypi-publish` in `publish-pypi.yml`. The owner comes
+from `GITHUB_REPOSITORY_OWNER` (D-BUILD-19). Not exercised: the first
+release run is the test.
 
 ## [5.1.1] - 2026-10-03
 
