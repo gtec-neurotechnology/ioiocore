@@ -6,9 +6,10 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Node &mdash; ioiocore v5.1.1  documentation</title>
+  <title>Node &mdash; ioiocore v5.1.2  documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_autodoc_typehints.css?v=057ac668" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
@@ -32,7 +33,7 @@
           
           
           <a href="../index.html" class="icon icon-home">
-            ioiocore v5.1.1
+            ioiocore v5.1.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -71,7 +72,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">ioiocore v5.1.1</a>
+          <a href="../index.html">ioiocore v5.1.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -261,7 +262,7 @@ place.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><span class="highlight sphinx_autodoc_typehints-value"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></span></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -337,10 +338,15 @@ block.</p>
 <dd><p>Abstract method to setup the Node.</p>
 <p>This method should be implemented to define the setup logic for the
 Node.</p>
+<p>Called once per run, before the first <code class="docutils literal notranslate"><span class="pre">step()</span></code>, with a context
+for every input port. A node whose input ports are all ASYNC is
+set up as soon as each has a context, so <code class="docutils literal notranslate"><span class="pre">data</span></code> is then empty;
+any other node is set up on its first cycle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>) – The input data to configure the Node.</p></li>
+<li><p><strong>data</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>) – The input data to configure the Node. Empty for a node whose
+input ports are all ASYNC.</p></li>
 <li><p><strong>port_context_in</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>) – Context for the input ports.</p></li>
 </ul>
 </dd>

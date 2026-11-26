@@ -5,9 +5,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ioiocore.node &mdash; ioiocore v5.1.1  documentation</title>
+  <title>ioiocore.node &mdash; ioiocore v5.1.2  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_autodoc_typehints.css?v=057ac668" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
@@ -29,7 +30,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            ioiocore v5.1.1
+            ioiocore v5.1.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -68,7 +69,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">ioiocore v5.1.1</a>
+          <a href="../../index.html">ioiocore v5.1.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -241,10 +242,16 @@
 <span class="sd">        This method should be implemented to define the setup logic for the</span>
 <span class="sd">        Node.</span>
 
+<span class="sd">        Called once per run, before the first ``step()``, with a context</span>
+<span class="sd">        for every input port. A node whose input ports are all ASYNC is</span>
+<span class="sd">        set up as soon as each has a context, so ``data`` is then empty;</span>
+<span class="sd">        any other node is set up on its first cycle.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        data : dict</span>
-<span class="sd">            The input data to configure the Node.</span>
+<span class="sd">            The input data to configure the Node. Empty for a node whose</span>
+<span class="sd">            input ports are all ASYNC.</span>
 <span class="sd">        port_context_in : dict</span>
 <span class="sd">            Context for the input ports.</span>
 
